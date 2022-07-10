@@ -1,0 +1,102 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Agro2cycle||Tipos de Produtos{% endblock title %}
+{% block content %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Produtos</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Tipo produto</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <button id="create-type" class="btn btn-primary" type="button" name="button">Novo Tipo
+                                </button>
+                                <div class="card-tools">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" class="form-control float-right"
+                                               placeholder="Search">
+
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0" style="height: 300px;">
+                                <table class="table table-head-fixed text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nome</th>
+                                        <th>Data de Cadastro</th>
+                                        <th>Slug</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for type in TypesProducts %}
+                                        <tr>
+                                            <td>{{ type.id }}</td>
+                                            <td>{{ type.name }}</td>
+                                            <td>{{ type.created_at }}</td>
+                                            <td>{{ type.slug }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <td>Ainda não foram cadastrados tipos de produtos!!!</td>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+    <!-- You can alternatively load the minified version -->
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#create-type").modalForm({
+                formURL: "{% url 'products:create_product_type' %}"
+            });
+
+        });
+    </script>
+
+{% endblock scripts %}
