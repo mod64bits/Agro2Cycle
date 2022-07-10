@@ -114,7 +114,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+baseAdmin/
 # Spyder project settings
 .spyderproject
 .spyproject
