@@ -1,5 +1,6 @@
 from django.urls import path, re_path
 from .views import ProductListView, ProductCreateView, ListTypeProductView, CreateTypeProductView
+from apps.core.views import DashBoardView
 
 app_name = "products"
 
