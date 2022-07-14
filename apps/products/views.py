@@ -1,8 +1,10 @@
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
-from .models import Product, TypeProduct
-from .forms import ProductCreateForm, TypeProductCreateForm
+
+
+from .models import Product, TypeProduct, ImagensProducts
+from .forms import ProductCreateForm, TypeProductCreateForm, UpdateProductForm, ImagesForm
 from bootstrap_modal_forms.generic import BSModalCreateView
 
 
@@ -20,6 +22,21 @@ class ProductCreateView(BSModalCreateView):
     success_url = reverse_lazy('products:products_list')
 
 
+class UpdateProductView(UpdateView):
+    model = Product
+    form_class = UpdateProductForm
+    template_name = 'products/update_product.html'
+
+    def get_imagens(self):
+        imagens = ImagensProducts.objects.filter(product=self.object)
+        return imagens
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['imagens'] = self.get_imagens()
+        return context
+
+
 class ListTypeProductView(ListView):
     model = TypeProduct
     context_object_name = "TypesProducts"
@@ -27,8 +44,30 @@ class ListTypeProductView(ListView):
     paginate_by = 25
 
 
+
 class CreateTypeProductView(BSModalCreateView):
     template_name = 'products/create_type_product.html'
     form_class = TypeProductCreateForm
     success_message = 'Success: Tipo Criado!!.'
-    success_url = reverse_lazy('products:product_type_list')
+    #success_url = reverse_lazy('products:products_update' self.kwargs)
+
+
+class UploadImageProductWiew(BSModalCreateView):
+    template_name = 'products/upload_image_product.html'
+    form_class = ImagesForm
+    success_message = 'Success: Tipo Criado!!.'
+    success_url = reverse_lazy('products:products_list')
+
+    def post(self, request, *args, **kwargs):
+        # TODO: Bug as imagens estão duplicando
+        files = request.FILES.getlist('image')
+        product = Product.objects.get(pk=kwargs['pk'])
+        url = f"/produtos/editar/{product.slug}/"
+        for file in files:
+            image = ImagensProducts.objects.create(product=product, image=file)
+            image.save()
+        return redirect(url)
+
+
+
+

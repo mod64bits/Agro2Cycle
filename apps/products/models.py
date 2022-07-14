@@ -52,3 +52,9 @@ class Product(BaseProduct):
 
 
 signals.post_save.connect(create_slug, sender=Product)
+
+
+class ImagensProducts(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="img_product", null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
+
